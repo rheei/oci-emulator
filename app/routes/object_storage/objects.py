@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 objects = Blueprint("objects", __name__)
 
 @objects.route("/n/<namespace_name>/b/<bucket_name>/o/<path:subpath>", methods=["HEAD"])
-def get_head_object(namespace_name, bucket_name, subpath):
+def head_object(namespace_name, bucket_name, subpath):
     bucket = get_bucket(namespace=namespace_name, bucket_name=bucket_name)
         if bucket is None:
             return Response(
