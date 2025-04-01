@@ -108,9 +108,13 @@ class BucketRoutes(unittest.TestCase):
 
         self.assertEqual(r.status, 200)
 
-        r = cli.head_object(namespace_name=namespace_name, bucket_name="bucket_name", object_name="folder/file.txt")
+        r = cli.head_object(
+            namespace_name=namespace_name,
+            bucket_name="bucket_name",
+            object_name="folder/file.txt",
+        )
         self.assertEqual(r.status, 200)
-        self.assertIn('Last-Modified', r.headers)
+        self.assertIn("Last-Modified", r.headers)
 
         r = cli.list_objects(namespace_name=namespace_name, bucket_name="bucket_name")
         self.assertEqual(r.status, 200)
