@@ -2,6 +2,7 @@ import logging
 import json
 import uuid
 import os
+import time
 from email.utils import formatdate
 
 from flask import Blueprint
@@ -103,7 +104,7 @@ def put_object(namespace_name, bucket_name, subpath):
     with open(f"tmp/{ref_obj}", "wb") as file:
         file.write(request.data)
 
-    last_modified = time.Time()
+    last_modified = time.time()
     bucket["_objects"].append(
         {
             "cache_control": cache_control,
