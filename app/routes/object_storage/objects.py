@@ -27,7 +27,7 @@ def head_object(namespace_name, bucket_name, subpath):
                     "message": f"Either the bucket named '{bucket_name}' does not exist in the namespace '{namespace_name}' or you are not authorized to access it",
                 }
             ),
-            headers={ "opc-request-id": request.headers.get("Opc-Request-Id", "") },
+            headers={"opc-request-id": request.headers.get("Opc-Request-Id", "")},
         )
 
     _object = get_object(bucket=bucket, object_name=subpath)
@@ -41,7 +41,7 @@ def head_object(namespace_name, bucket_name, subpath):
                     "message": f"The object '{subpath}' was not found in the bucket '{bucket_name}'",
                 }
             ),
-            headers={ "opc-request-id": request.headers.get("Opc-Request-Id", "") },
+            headers={"opc-request-id": request.headers.get("Opc-Request-Id", "")},
         )
 
     etag = _object.get("etag", str(uuid.uuid4()))
