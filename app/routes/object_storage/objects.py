@@ -13,23 +13,22 @@ from app.resources.object_storage.objects import get_objects
 logger = logging.getLogger(__name__)
 objects = Blueprint("objects", __name__)
 
+
 @objects.route("/n/<namespace_name>/b/<bucket_name>/o/<path:subpath>", methods=["HEAD"])
 def head_object(namespace_name, bucket_name, subpath):
     bucket = get_bucket(namespace=namespace_name, bucket_name=bucket_name)
-        if bucket is None:
-            return Response(
-                status=404,
-                content_type="application/json",
-                response=json.dumps(
-                    {
-                        "code": "BucketNotFound",
-                        "message": f"Either the bucket named '{bucket_name}' does not exist in the namespace '{namespace_name}' or you are not authorized to access it",
-                    }
-                ),
-                headers={
-                    "opc-request-id": request.headers.get("Opc-Request-Id", "")
-                },
-            )
+    if bucket is None:
+        return Response(
+            status=404,
+            content_type="application/json",
+            response=json.dumps(
+                {
+                    "code": "BucketNotFound",
+                    "message": f"Either the bucket named '{bucket_name}' does not exist in the namespace '{namespace_name}' or you are not authorized to access it",
+                }
+            ),
+            headers={ "opc-request-id": request.headers.get("Opc-Request-Id", "") },
+        )
 
     _object = get_object(bucket=bucket, object_name=subpath)
     if _object is None:
@@ -42,9 +41,7 @@ def head_object(namespace_name, bucket_name, subpath):
                     "message": f"The object '{subpath}' was not found in the bucket '{bucket_name}'",
                 }
             ),
-            headers={
-                "opc-request-id": request.headers.get("Opc-Request-Id", "")
-            },
+            headers={ "opc-request-id": request.headers.get("Opc-Request-Id", "") },
         )
 
     etag = _object.get("etag", str(uuid.uuid4()))
@@ -66,6 +63,7 @@ def head_object(namespace_name, bucket_name, subpath):
             "Content-Disposition": _object.get("content_disposition", ""),
         },
     )
+
 
 @objects.route("/n/<namespace_name>/b/<bucket_name>/o/<path:subpath>", methods=["PUT"])
 def put_object(namespace_name, bucket_name, subpath):
