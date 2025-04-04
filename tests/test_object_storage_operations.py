@@ -115,6 +115,9 @@ class BucketRoutes(unittest.TestCase):
         )
         self.assertEqual(r.status, 200)
         self.assertIn("LastModified", r.headers)
+        self.assertIn("Content-Encoding", r.headers)
+        self.assertIn("opc-meta", r.headers)
+        self.assertIn("opc-content-crc32c", r.headers)
 
         r = cli.list_objects(namespace_name=namespace_name, bucket_name="bucket_name")
         self.assertEqual(r.status, 200)
