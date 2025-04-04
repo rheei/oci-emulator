@@ -75,6 +75,10 @@ class BucketRoutes(unittest.TestCase):
         self.assertEqual(r.status, 200)
         self.assertEqual(len(r.data), 0)
 
+        r = cli.list_buckets(namespace_name=namespace_name, compartment_id="compartment_id")
+        self.assertEqual(r.status, 200)
+        self.assertEqual(len(r.data), 0)
+
     def test_bucket_and_object(self):
         cli = oci.object_storage.ObjectStorageClient(
             self.oci_config["config"], service_endpoint="http://localhost:12000"
@@ -107,6 +111,14 @@ class BucketRoutes(unittest.TestCase):
         )
 
         self.assertEqual(r.status, 200)
+
+        r = cli.head_object(
+            namespace_name=namespace_name,
+            bucket_name="bucket_name",
+            object_name="folder/file.txt",
+        )
+        self.assertEqual(r.status, 200)
+        self.assertIn("LastModified", r.headers)
 
         r = cli.list_objects(namespace_name=namespace_name, bucket_name="bucket_name")
         self.assertEqual(r.status, 200)
